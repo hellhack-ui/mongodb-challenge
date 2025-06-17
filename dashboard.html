@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsInsight AI Dashboard - Advanced Analytics</title>
+    <meta name="description" content="Advanced dashboard for news analytics with real-time sentiment analysis and bias detection">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="h-8 w-8 rounded-lg gradient-bg flex items-center justify-center">
+                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold">NewsInsight AI</h1>
+                            <p class="text-xs text-gray-500">Advanced Analytics Dashboard</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></span>
+                        Real-time Analytics
+                    </span>
+                    
+                    <button class="p-2 text-gray-500 hover:text-gray-700">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <a href="index.html"><img src="pngtree-home-web-button-round-png-image_10462508.png" height="50" width="50"></a>
+                            <a href="dashboard.html"><img src="Tab-icon-by-ahlangraphic-580x386.jpg" height="50" width="50"></a>
+                            <a href="about.html"><img src="5995295.png" height="50" width="50"></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Dashboard Header -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold tracking-tight mb-2">Analytics Dashboard</h2>
+            <p class="text-gray-600">Real-time insights into global news sentiment, topics, and bias patterns</p>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Articles Processed</p>
+                        <p class="text-3xl font-bold text-blue-600" id="articlesProcessed">12,847</p>
+                    </div>
+                    <div class="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <span class="text-sm text-green-600">↗ +15.3% from yesterday</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Sentiment Score</p>
+                        <p class="text-3xl font-bold text-green-600" id="sentimentScore">+0.34</p>
+                    </div>
+                    <div class="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15M9 10v4a2 2 0 002 2h2a2 2 0 002-2v-4M9 10V9a2 2 0 012-2h2a2 2 0 012 2v1"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <span class="text-sm text-green-600">Trending positive</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Active Sources</p>
+                        <p class="text-3xl font-bold text-purple-600" id="activeSources">247</p>
+                    </div>
+                    <div class="h-12 w-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <span class="text-sm text-blue-600">+12 new sources</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Bias Alerts</p>
+                        <p class="text-3xl font-bold text-red-600" id="biasAlerts">89</p>
+                    </div>
+                    <div class="h-12 w-12 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <span class="text-sm text-red-600">↗ +8% increase</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Sentiment Trend Chart -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Sentiment Trend (24h)</h3>
+                <div class="chart-container">
+                    <canvas id="sentimentChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Topic Distribution Chart -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Topic Distribution</h3>
+                <div class="chart-container">
+                    <canvas id="topicChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bias Analysis Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Political Bias Chart -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Political Bias</h3>
+                <div class="chart-container">
+                    <canvas id="biasChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Source Reliability -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Source Reliability</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium">Reuters</span>
+                        <div class="flex items-center">
+                            <div class="w-20 bg-gray-200 rounded-full h-2 mr-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                            <span class="text-xs text-gray-600">95%</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium">BBC News</span>
+                        <div class="flex items-center">
+                            <div class="w-20 bg-gray-200 rounded-full h-2 mr-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 92%"></div>
+                            </div>
+                            <span class="text-xs text-gray-600">92%</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium">AP News</span>
+                        <div class="flex items-center">
+                            <div class="w-20 bg-gray-200 rounded-full h-2 mr-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 94%"></div>
+                            </div>
+                            <span class="text-xs text-gray-600">94%</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium">CNN</span>
+                        <div class="flex items-center">
+                            <div class="w-20 bg-gray-200 rounded-full h-2 mr-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 78%"></div>
+                            </div>
+                            <span class="text-xs text-gray-600">78%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Alerts -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Recent Bias Alerts</h3>
+                <div class="space-y-3">
+                    <div class="border-l-4 border-red-400 pl-3 py-2">
+                        <p class="text-sm font-medium">High Bias Detected</p>
+                        <p class="text-xs text-gray-600">Political article with strong partisan language</p>
+                        <span class="text-xs text-red-600">Score: 8.7/10</span>
+                    </div>
+                    <div class="border-l-4 border-yellow-400 pl-3 py-2">
+                        <p class="text-sm font-medium">Medium Bias</p>
+                        <p class="text-xs text-gray-600">Economic report with selective data presentation</p>
+                        <span class="text-xs text-yellow-600">Score: 6.2/10</span>
+                    </div>
+                    <div class="border-l-4 border-orange-400 pl-3 py-2">
+                        <p class="text-sm font-medium">Language Bias</p>
+                        <p class="text-xs text-gray-600">Emotionally charged terminology detected</p>
+                        <span class="text-xs text-orange-600">Score: 7.1/10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Feed -->
+        <div class="bg-white rounded-lg shadow-sm border">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">Live News Analysis</h3>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></span>
+                        Live
+                    </span>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4" id="liveFeed">
+                    <!-- Live feed items will be populated here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize charts when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSentimentChart();
+            initializeTopicChart();
+            initializeBiasChart();
+            startLiveFeed();
+        });
+
+        // Sentiment Trend Chart
+        function initializeSentimentChart() {
+            const ctx = document.getElementById('sentimentChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                    datasets: [{
+                        label: 'Sentiment Score',
+                        data: [0.2, 0.1, 0.4, 0.3, 0.6, 0.4, 0.5],
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            min: -1,
+                            max: 1
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Topic Distribution Chart
+        function initializeTopicChart() {
+            const ctx = document.getElementById('topicChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Politics', 'Technology', 'Economy', 'Health', 'Environment', 'Sports'],
+                    datasets: [{
+                        data: [25, 20, 18, 15, 12, 10],
+                        backgroundColor: [
+                            '#ef4444',
+                            '#3b82f6',
+                            '#10b981',
+                            '#f59e0b',
+                            '#8b5cf6',
+                            '#06b6d4'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Political Bias Chart
+        function initializeBiasChart() {
+            const ctx = document.getElementById('biasChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Left', 'Center', 'Right'],
+                    datasets: [{
+                        label: 'Articles',
+                        data: [30, 45, 25],
+                        backgroundColor: ['#3b82f6', '#6b7280', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Live Feed Simulation
+        function startLiveFeed() {
+            const liveFeed = document.getElementById('liveFeed');
+            const feedItems = [
+                { title: "Breaking: Major policy announcement expected", sentiment: 0.2, source: "Reuters", time: new Date() },
+                { title: "Tech stocks surge following earnings reports", sentiment: 0.7, source: "Financial Times", time: new Date() },
+                { title: "Climate summit reaches critical negotiations", sentiment: -0.1, source: "BBC News", time: new Date() }
+            ];
+
+            // Add initial items
+            feedItems.forEach(item => {
+                addFeedItem(item);
+            });
+
+            // Simulate new items every 10 seconds
+            setInterval(() => {
+                const newItem = {
+                    title: generateRandomTitle(),
+                    sentiment: (Math.random() - 0.5) * 2,
+                    source: getRandomSource(),
+                    time: new Date()
+                };
+                addFeedItem(newItem);
+                
+                // Remove old items (keep only last 10)
+                const items = liveFeed.children;
+                if (items.length > 10) {
+                    liveFeed.removeChild(items[items.length - 1]);
+                }
+            }, 10000);
+        }
+
+        function addFeedItem(item) {
+            const liveFeed = document.getElementById('liveFeed');
+            const feedItem = document.createElement('div');
+            feedItem.className = 'flex justify-between items-start p-3 border-l-4 border-blue-400 bg-blue-50 rounded animate-pulse';
+            
+            const sentimentColor = item.sentiment > 0.3 ? 'text-green-600' : item.sentiment < -0.3 ? 'text-red-600' : 'text-yellow-600';
+            const sentimentLabel = item.sentiment > 0.3 ? 'Positive' : item.sentiment < -0.3 ? 'Negative' : 'Neutral';
+            
+            feedItem.innerHTML = `
+                <div class="flex-1">
+                    <p class="font-medium text-sm">${item.title}</p>
+                    <div class="flex items-center space-x-2 mt-1">
+                        <span class="text-xs text-gray-600">${item.source}</span>
+                        <span class="text-xs text-gray-400">•</span>
+                        <span class="text-xs text-gray-600">${item.time.toLocaleTimeString()}</span>
+                    </div>
+                </div>
+                <span class="text-xs ${sentimentColor} font-medium">${sentimentLabel}</span>
+            `;
+            
+            liveFeed.insertBefore(feedItem, liveFeed.firstChild);
+            
+            // Remove animation after a short delay
+            setTimeout(() => {
+                feedItem.classList.remove('animate-pulse');
+            }, 2000);
+        }
+
+        function generateRandomTitle() {
+            const titles = [
+                "Global markets respond to economic indicators",
+                "Technology sector shows strong growth",
+                "Environmental policies under review",
+                "Healthcare innovation breakthrough announced",
+                "International trade negotiations continue",
+                "Energy sector investments increase",
+                "Education reform proposals unveiled",
+                "Transportation infrastructure updates",
+                "Scientific research yields new findings",
+                "Cultural events gain international attention"
+            ];
+            return titles[Math.floor(Math.random() * titles.length)];
+        }
+
+        function getRandomSource() {
+            const sources = ["Reuters", "AP News", "BBC", "CNN", "Financial Times", "The Guardian", "Wall Street Journal"];
+            return sources[Math.floor(Math.random() * sources.length)];
+        }
+
+        // Update metrics periodically
+        setInterval(() => {
+            updateMetrics();
+        }, 30000); // Update every 30 seconds
+
+        function updateMetrics() {
+            // Simulate metric updates
+            const articlesElement = document.getElementById('articlesProcessed');
+            const currentArticles = parseInt(articlesElement.textContent.replace(',', ''));
+            articlesElement.textContent = (currentArticles + Math.floor(Math.random() * 50)).toLocaleString();
+
+            const sentimentElement = document.getElementById('sentimentScore');
+            const newSentiment = ((Math.random() - 0.5) * 2).toFixed(2);
+            sentimentElement.textContent = newSentiment > 0 ? `+${newSentiment}` : newSentiment;
+
+            const sourcesElement = document.getElementById('activeSources');
+            const currentSources = parseInt(sourcesElement.textContent);
+            sourcesElement.textContent = currentSources + Math.floor(Math.random() * 3);
+
+            const biasElement = document.getElementById('biasAlerts');
+            const currentBias = parseInt(biasElement.textContent);
+            biasElement.textContent = currentBias + Math.floor(Math.random() * 5);
+        }
+    </script>
+</body>
+</html>

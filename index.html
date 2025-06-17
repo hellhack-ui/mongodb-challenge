@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsInsight AI - Global News Intelligence Platform</title>
+    <meta name="description" content="AI-powered news insights platform with sentiment analysis, topic clustering, and bias detection across global news sources">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .news-card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .news-card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+        
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex h-16 items-center justify-between">
+                <!-- Logo and Brand -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="h-8 w-8 rounded-lg gradient-bg flex items-center justify-center">
+                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold">NewsInsight AI</h1>
+                            <p class="text-xs text-gray-500 hidden sm:block">Global News Intelligence</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8">
+                    <div class="flex w-full space-x-2">
+                        <input 
+                            type="text" 
+                            placeholder="Search global news..." 
+                            class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            id="searchInput"
+                        >
+                        <button class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" onclick="searchNews()">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden lg:flex items-center space-x-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></span>
+                            Live
+                        </span>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            24/7
+                        </span>
+                    </div>
+                    
+                    <button class="p-2 text-gray-500 hover:text-gray-700" onclick="toggleTheme()">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <a href="index.html"><img src="pngtree-home-web-button-round-png-image_10462508.png" height="50" width="50"></a>
+                            <a href="dashboard.html"><img src="Tab-icon-by-ahlangraphic-580x386.jpg" height="50" width="50"></a>
+                            <a href="about.html"><img src="5995295.png" height="50" width="50"></a>
+            </div>
+                            
+
+            <!-- Mobile Search -->
+            <div class="md:hidden pb-4">
+                <div class="flex w-full space-x-2">
+                    <input 
+                        type="text" 
+                        placeholder="Search global news..." 
+                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        id="mobileSearchInput"
+                    >
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" onclick="searchNews()">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Page Header -->
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
+            <div>
+                <h2 class="text-2xl font-bold tracking-tight">Global News Intelligence</h2>
+                <p class="text-gray-600">AI-powered analysis of global news sentiment, topics, and bias detection</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+                <select class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" id="regionSelect">
+                    <option value="global">Global</option>
+                    <option value="us">United States</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="eu">European Union</option>
+                    <option value="asia">Asia</option>
+                    <option value="africa">Africa</option>
+                </select>
+
+                <select class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ar">Arabic</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Total Articles</p>
+                        <p class="text-2xl font-bold" id="totalArticles">1,247</p>
+                        <p class="text-xs text-gray-500">Articles analyzed today</p>
+                    </div>
+                    <div class="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="h-4 w-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <span class="inline-flex items-center text-xs text-green-600">
+                        <svg class="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        +12%
+                    </span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">News Sources</p>
+                        <p class="text-2xl font-bold" id="newsSources">47</p>
+                        <p class="text-xs text-gray-500">Active news sources</p>
+                    </div>
+                    <div class="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="h-4 w-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <span class="inline-flex items-center text-xs text-green-600">
+                        <svg class="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        +3
+                    </span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Avg Sentiment</p>
+                        <p class="text-2xl font-bold" id="avgSentiment">0.34</p>
+                        <p class="text-xs text-gray-500">Overall sentiment score</p>
+                    </div>
+                    <div class="h-8 w-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <svg class="h-4 w-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <span class="inline-flex items-center text-xs text-green-600">
+                        Positive
+                    </span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Bias Alerts</p>
+                        <p class="text-2xl font-bold" id="biasAlerts">23</p>
+                        <p class="text-xs text-gray-500">High bias detected</p>
+                    </div>
+                    <div class="h-8 w-8 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg class="h-4 w-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <span class="inline-flex items-center text-xs text-red-600">
+                        <svg class="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
+                        </svg>
+                        -5%
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="bg-white rounded-lg shadow-sm border mb-6">
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8 px-6" aria-label="Tabs">
+                    <button class="tab-button active border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="news">
+                        <svg class="h-4 w-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        News Feed
+                    </button>
+                    <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="sentiment">
+                        <svg class="h-4 w-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Sentiment
+                    </button>
+                    <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="topics">
+                        <svg class="h-4 w-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        Topics
+                    </button>
+                    <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="bias">
+                        <svg class="h-4 w-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                        Bias
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="p-6">
+                <!-- News Feed Tab -->
+                <div id="news-tab" class="tab-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="newsGrid">
+                        <!-- News articles will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Sentiment Tab -->
+                <div id="sentiment-tab" class="tab-content hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-4">Sentiment Distribution</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>Positive</span>
+                                        <span>45%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>Neutral</span>
+                                        <span>35%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-yellow-400 h-2 rounded-full" style="width: 35%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>Negative</span>
+                                        <span>20%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-red-500 h-2 rounded-full" style="width: 20%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-4">Sentiment by Source</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm">Reuters</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">Positive</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm">BBC News</span>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs">Neutral</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm">CNN</span>
+                                    <span class="px-2 py-1 bg-red-100 text-red-800 rounded text-xs">Negative</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topics Tab -->
+                <div id="topics-tab" class="tab-content hidden">
+                    <div class="bg-gray-50 p-8 rounded-lg text-center">
+                        <h3 class="text-lg font-semibold mb-4">Topic Clusters Visualization</h3>
+                        <p class="text-gray-600 mb-4">Interactive topic cluster visualization would appear here</p>
+                        <div class="flex flex-wrap gap-2 justify-center">
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Technology</span>
+                            <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Politics</span>
+                            <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Economy</span>
+                            <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm">Health</span>
+                            <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">Environment</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bias Tab -->
+                <div id="bias-tab" class="tab-content hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-4">Political Bias Distribution</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>Left-leaning</span>
+                                        <span>30%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 30%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>Center/Neutral</span>
+                                        <span>45%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-gray-400 h-2 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>Right-leaning</span>
+                                        <span>25%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-red-500 h-2 rounded-full" style="width: 25%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-4">Bias Examples</h3>
+                            <div class="space-y-3">
+                                <div class="border-l-4 border-red-400 pl-3">
+                                    <p class="text-sm font-medium">High Bias Detected</p>
+                                    <p class="text-xs text-gray-600">Controversial decision by officials</p>
+                                    <span class="text-xs text-red-600">Bias Score: 8.2/10</span>
+                                </div>
+                                <div class="border-l-4 border-yellow-400 pl-3">
+                                    <p class="text-sm font-medium">Medium Bias Detected</p>
+                                    <p class="text-xs text-gray-600">Questionable policy implementation</p>
+                                    <span class="text-xs text-yellow-600">Bias Score: 5.7/10</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        // Mock news data
+        const mockNewsData = [
+            {
+                title: "Global Tech Giants Announce AI Ethics Coalition",
+                description: "Leading technology companies have formed a coalition to establish ethical guidelines for artificial intelligence development and deployment.",
+                url: "https://example.com/tech-ai-ethics",
+                urlToImage: "https://via.placeholder.com/400x200?text=AI+Ethics",
+                publishedAt: "2023-06-15T09:30:00Z",
+                source: { name: "Tech Daily" },
+                sentiment: 0.6,
+                categories: ["Technology", "AI", "Ethics"]
+            },
+            {
+                title: "Climate Change Accelerating Faster Than Previously Predicted",
+                description: "New research suggests that climate change effects are occurring at a more rapid pace than scientists had previously estimated.",
+                url: "https://example.com/climate-change-acceleration",
+                urlToImage: "https://via.placeholder.com/400x200?text=Climate+Change",
+                publishedAt: "2023-06-14T14:45:00Z",
+                source: { name: "Science Today" },
+                sentiment: -0.7,
+                categories: ["Environment", "Climate", "Research"]
+            },
+            {
+                title: "Global Economy Shows Signs of Recovery Post-Pandemic",
+                description: "Economic indicators suggest a stronger than expected recovery in global markets following the COVID-19 pandemic.",
+                url: "https://example.com/economy-recovery",
+                urlToImage: "https://via.placeholder.com/400x200?text=Economy+Recovery",
+                publishedAt: "2023-06-13T11:20:00Z",
+                source: { name: "Financial Times" },
+                sentiment: 0.8,
+                categories: ["Economy", "Markets", "Post-Pandemic"]
+            },
+            {
+                title: "Healthcare Innovation Summit Highlights AI Diagnostic Tools",
+                description: "The annual Healthcare Innovation Summit showcased breakthrough AI-powered diagnostic technologies that promise to transform patient care.",
+                url: "https://example.com/healthcare-ai-summit",
+                urlToImage: "https://via.placeholder.com/400x200?text=Healthcare+AI",
+                publishedAt: "2023-06-12T16:10:00Z",
+                source: { name: "Health News Network" },
+                sentiment: 0.5,
+                categories: ["Healthcare", "AI", "Innovation"]
+            },
+            {
+                title: "Political Tensions Rise in Eastern Europe",
+                description: "Diplomatic relations deteriorate as neighboring countries engage in border disputes and economic sanctions.",
+                url: "https://example.com/eastern-europe-tensions",
+                urlToImage: "https://via.placeholder.com/400x200?text=Political+Tensions",
+                publishedAt: "2023-06-11T08:50:00Z",
+                source: { name: "World Politics Journal" },
+                sentiment: -0.6,
+                categories: ["Politics", "International Relations", "Europe"]
+            },
+            {
+                title: "Renewable Energy Investments Reach Record High",
+                description: "Global investments in renewable energy sources have surpassed fossil fuels for the first time in history.",
+                url: "https://example.com/renewable-energy-investments",
+                urlToImage: "https://via.placeholder.com/400x200?text=Renewable+Energy",
+                publishedAt: "2023-06-10T13:15:00Z",
+                source: { name: "Energy Monitor" },
+                sentiment: 0.9,
+                categories: ["Energy", "Environment", "Investment"]
+            }
+        ];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNewsArticles();
+            setupTabNavigation();
+        });
+
+        // Load news articles
+        function loadNewsArticles() {
+            const newsGrid = document.getElementById('newsGrid');
+            newsGrid.innerHTML = '';
+
+            mockNewsData.forEach(article => {
+                const articleCard = createArticleCard(article);
+                newsGrid.appendChild(articleCard);
+            });
+        }
+
+        // Create article card
+        function createArticleCard(article) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-lg shadow-sm border news-card-hover overflow-hidden';
+
+            const sentimentColor = getSentimentColor(article.sentiment);
+            const sentimentLabel = getSentimentLabel(article.sentiment);
+
+            card.innerHTML = `
+                <div class="w-full h-48 overflow-hidden">
+                    <img src="${article.urlToImage}" alt="${article.title}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x200?text=News+Image'">
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg line-clamp-2 mb-2">${article.title}</h3>
+                    <p class="text-gray-600 text-sm line-clamp-3 mb-3">${article.description}</p>
+                    <div class="flex justify-between items-center text-xs text-gray-500 mb-3">
+                        <span>${article.source.name}</span>
+                        <span>${new Date(article.publishedAt).toLocaleDateString()}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="px-2 py-1 ${sentimentColor} rounded text-xs">${sentimentLabel}</span>
+                        <a href="${article.url}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm">
+                            Read more →
+                        </a>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Get sentiment color
+        function getSentimentColor(sentiment) {
+            if (sentiment > 0.3) return 'bg-green-100 text-green-800';
+            if (sentiment < -0.3) return 'bg-red-100 text-red-800';
+            return 'bg-yellow-100 text-yellow-800';
+        }
+
+        // Get sentiment label
+        function getSentimentLabel(sentiment) {
+            if (sentiment > 0.3) return 'Positive';
+            if (sentiment < -0.3) return 'Negative';
+            return 'Neutral';
+        }
+
+        // Setup tab navigation
+        function setupTabNavigation() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+
+                    // Remove active class from all buttons
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active', 'border-blue-500', 'text-blue-600');
+                        btn.classList.add('border-transparent', 'text-gray-500');
+                    });
+
+                    // Add active class to clicked button
+                    this.classList.add('active', 'border-blue-500', 'text-blue-600');
+                    this.classList.remove('border-transparent', 'text-gray-500');
+
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+
+                    // Show selected tab content
+                    const selectedTab = document.getElementById(tabName + '-tab');
+                    if (selectedTab) {
+                        selectedTab.classList.remove('hidden');
+                    }
+                });
+            });
+        }
+
+        // Search functionality
+        function searchNews() {
+            const searchInput = document.getElementById('searchInput') || document.getElementById('mobileSearchInput');
+            const query = searchInput.value.toLowerCase();
+            
+            if (!query) {
+                loadNewsArticles();
+                return;
+            }
+
+            const filteredNews = mockNewsData.filter(article => 
+                article.title.toLowerCase().includes(query) || 
+                article.description.toLowerCase().includes(query)
+            );
+
+            const newsGrid = document.getElementById('newsGrid');
+            newsGrid.innerHTML = '';
+
+            if (filteredNews.length === 0) {
+                newsGrid.innerHTML = '<div class="col-span-full text-center py-12"><h3 class="text-xl font-medium mb-2">No articles found</h3><p class="text-gray-600">Try adjusting your search query</p></div>';
+                return;
+            }
+
+            filteredNews.forEach(article => {
+                const articleCard = createArticleCard(article);
+                newsGrid.appendChild(articleCard);
+            });
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            // In a real implementation, you would save the theme preference
+        }
+
+        // Handle Enter key in search inputs
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && (e.target.id === 'searchInput' || e.target.id === 'mobileSearchInput')) {
+                searchNews();
+            }
+        });
+    </script>
+</body>
+</html>
